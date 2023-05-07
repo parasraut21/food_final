@@ -10,6 +10,8 @@ import { Provider } from 'react-redux';
 import store from './store';
 import Cart from './screens/Cart';
 import MyOrder from './screens/Myorders';
+import Payment from './components/Payment';
+import OrderStatus from './screens/Orderstatus';
 
 function App() {
   return (
@@ -23,6 +25,8 @@ function App() {
         <Route exact path='/reset' element={<Reset/>}/>
         <Route exact path='/verify' element={<Verify/>}/>
         <Route exact path='/myorders' element={<MyOrder/>}/>
+        <Route exact path='/pay' element={<Payment/>}/>
+        <Route exact path='/orderstatus' element={<OrderStatus/>}/>
         </Routes>
         </div>
     </Router> 

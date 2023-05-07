@@ -1,4 +1,4 @@
-const initialState = { amount: 0, cartItems: [] };
+const initialState = { amount: 0, cartItems: [], ADMIN: [],orderStatus: "",FOOD: [],D: []  };
 
 const reducers = (state = initialState, action) => {
   switch (action.type) {
@@ -8,6 +8,17 @@ const reducers = (state = initialState, action) => {
       return { ...state, amount: state.amount - action.payload };
     case 'ADD':
       return { ...state, cartItems: [...state.cartItems, action.payload] };
+      case "ADD_TO_ADMIN":
+        // Here you can use the spread operator to add the new item to the ADMIN array
+        return { ...state, ADMIN: [...state.ADMIN, action.payload] };
+        case "ADD_TO_FOOD":
+          // Here you can use the spread operator to add the new item to the ADMIN array
+          return { ...state, FOOD: [...state.FOOD, action.payload] };
+          case "ADD_TO_D":
+         
+            return { ...state, D: [...state.D, action.payload] };
+        case "UPDATE_ORDER_STATUS":
+          return { ...state, orderStatus: action.payload };
     case "REMOVE":
         return {
           ...state,

@@ -2,6 +2,7 @@
 import React, {useState} from 'react'
 import {Link} from "react-router-dom"
 import {useNavigate} from 'react-router-dom';
+import Navbar from '../components/Navbar';
 const Signup = () => {
     const [credentials, setCredentials] = useState({name:"",email: "", cpassword: "",confirmPassword:""}) 
     const navigate = useNavigate();
@@ -33,8 +34,26 @@ const Signup = () => {
     const onChange = (e)=>{
         setCredentials({...credentials, [e.target.name]: e.target.value})
     }
+    const [mode, setmode] = useState("light");
+
+    const togglemode = () => {
+      if (mode === "light") {
+        setmode("dark");
+        document.body.style.backgroundColor = "#042743";
+        document.title = "Online Food Ordering System - Dark Mode";
+      } else {
+        setmode("light");
+        document.body.style.backgroundColor = "white";
+        document.title = "Online Food Ordering System - Light Mode";
+      }
+    };
     return (
         <>
+          <Navbar
+            title="Online Food Ordering System"
+            mode={mode}
+            togglemode={togglemode}
+          />
         <div className='container'>
         <form onSubmit={handleSubmit} className="my-1" >
         <div className="mb-3" >

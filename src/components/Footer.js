@@ -4,33 +4,7 @@ export default function Footer() {
   return (
     <>
     <MDBFooter bgColor='light' className='text-center text-lg-start text-muted'>
-      <section className='d-flex justify-content-center justify-content-lg-between p-4 border-bottom'>
-        <div className='me-5 d-none d-lg-block'>
-          <span>Get connected with us on social networks:</span>
-        </div>
-
-        <div>
-          <div  className='me-4 text-reset'>
-            <MDBIcon color='secondary' fab icon='facebook-f' />
-          </div>
-          <div  className='me-4 text-reset'>
-            <MDBIcon color='secondary' fab icon='twitter' />
-          </div>
-          <div  className='me-4 text-reset'>
-            <MDBIcon color='secondary' fab icon='google' />
-          </div>
-          <div  className='me-4 text-reset'>
-            <MDBIcon color='secondary' fab icon='instagram' />
-          </div>
-          <div  className='me-4 text-reset'>
-            <MDBIcon color='secondary' fab icon='linkedin' />
-          </div>
-          <div  className='me-4 text-reset'>
-            <MDBIcon color='secondary' fab icon='github' />
-          </div>
-        </div>
-      </section>
-
+     
       <section className=''>
         <MDBContainer className='text-center text-md-start mt-5'>
           <MDBRow className='mt-3'>
@@ -48,22 +22,22 @@ export default function Footer() {
               <h6 className='text-uppercase fw-bold mb-4'>Products</h6>
               <p>
                 <a href='#!' className='text-reset'>
-                  Angular
+                  NodeJs
                 </a>
               </p>
               <p>
                 <a href='#!' className='text-reset'>
-                  React
+                  ReactJs
                 </a>
               </p>
               <p>
                 <a href='#!' className='text-reset'>
-                  Vue
+                  Javascript
                 </a>
               </p>
               <p>
                 <a href='#!' className='text-reset'>
-                  Laravel
+                  ExpressJs
                 </a>
               </p>
             </MDBCol>
@@ -100,7 +74,7 @@ export default function Footer() {
               </p>
               <p>
                 <MDBIcon color='secondary' icon='envelope' className='me-3' />
-                info@example.com
+                parasraut@gmail.com
               </p>
               <p>
                 <MDBIcon color='secondary' icon='phone' className='me-3' /> + 01 234 567 88
@@ -115,8 +89,8 @@ export default function Footer() {
 
       <div className='text-center p-4' style={{ backgroundColor: 'rgba(0, 0, 0, 0.05)' }}>
         © 2021 Copyright:
-        <a className='text-reset fw-bold' href='https://mdbootstrap.com/'>
-          MDBootstrap.com
+        <a className='text-reset fw-bold' href='/'>
+          OnlineFoodOrderingSystem
         </a>
       </div>
     </MDBFooter>

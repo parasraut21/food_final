@@ -5,6 +5,8 @@ import { useNavigate } from "react-router-dom";
 import Model from './Model'
 import { useSelector } from "react-redux";
 import Cart from "../screens/Cart";
+import './Navbar.css'
+import Admin from "../screens/Admin";
 
 
 export default function Navbar(props) {
@@ -20,15 +22,27 @@ const handlemycart = ()=>{
   setCartview(true)
 }
 
+const handleadmin=()=>{
+  setAdminview(true)
+}
   const amount = useSelector((state) => state.amount);
+  console.log(amount)
 
   const [cartview,setCartview] = useState(false);
+
+  const [adminview,setAdminview] = useState(false);
+
+  const userEmail = localStorage.getItem("userEmail")
   return (
     <>
-      <nav
-        className={`navbar navbar-expand-lg   navbar-${props.mode} bg-${props.mode}  `}
-      >
-        <div className="container-fluid">
+    <nav
+  className={`navbar navbar-expand-lg navbar-${props.mode} bg-${props.mode}`}
+  style={{
+    backgroundColor: "#ffffff",
+    color: "#333333",
+  }}
+>
+<div className="container-fluid">
           <Link className="navbar-brand fst-italic" to="/">
             {props.title}
           </Link>
@@ -45,15 +59,29 @@ const handlemycart = ()=>{
           </button>
           <div className="collapse navbar-collapse" id="navbarSupportedContent">
             <ul className="navbar-nav me-auto mb-2 ">
-              <li className="nav-item">
-                <Link
-                  className="nav-link active fs-5"
-                  aria-current="page"
-                  to="/"
-                >
-                  Home
-                </Link>
+            <li className="nav-item">
+            <div style={{borderColor:" #28a745",
+                 borderRadius:" 0.25rem",right:"0px" ,bottom:"0px"}}>
+              
+                </div>
+                {adminview?<Model onClose={()=>setAdminview(false)}><Admin/></Model>
+                      :null}
               </li>
+              <li className="nav-item">
+                  <Link
+                    className="nav-link active fs-5"
+                    aria-current="page"
+                    
+                  >
+                   <a
+                 onClick={handleadmin}
+                 type="submit"
+                 className=""
+                >
+                  Admin
+                </a>
+                  </Link>
+                </li>
               {localStorage.getItem("token") ? (
                 <li className="nav-item">
                   <Link
@@ -64,20 +92,23 @@ const handlemycart = ()=>{
                     My Orders
                   </Link>
                 </li>
+                
               ) : (
                 ""
               )}
-
+            
+              
               <li className="nav-item">
-                <Link className="nav-link" to="/reset">
-                  Reset Password
+                <Link style={{borderColor:" #28a745",
+    borderRadius:" 0.25rem"}}
+                  className="nav-link active fs-5"
+                  aria-current="page"
+                  to="/orderstatus"
+                >
+                 Order Status
                 </Link>
               </li>
-              <li className="nav-item">
-                <Link className="nav-link" to="/verify">
-                  Verify
-                </Link>
-              </li>
+              
             </ul>
             <div className="form-check form-switch">
               <input
@@ -95,6 +126,7 @@ const handlemycart = ()=>{
               >
                 Enable {props.mode === "light" ? "Dark" : "Light"} Mode
               </label>
+             
               <div>
                 {!localStorage.getItem("token") ? (
                   <div className="d-flex">
@@ -113,6 +145,7 @@ const handlemycart = ()=>{
                   </div>
                 ) : (
                   <div>
+                    {userEmail}
                     <div className="btn bg-white text-success mx-1">
                       <i
                         className="fa fa-shopping-cart"
@@ -120,12 +153,14 @@ const handlemycart = ()=>{
                       ></i>{" "}
                       <span className="badge badge-warning" id="lblCartCount" >
                         {" "}
-                        {amount}{" "}
+                        {amount} {" "}
                       </span>{" "}
-                     <button className="btn" onClick={handlemycart}>My Cart</button> 
+                     <button className="btn" onClick={handlemycart} style={{borderColor:" #28a745",
+    borderRadius:" 0.25rem"}}>My Cart</button> 
                     </div>
                     {cartview?<Model onClose={()=>setCartview(false)}><Cart/></Model>
                       :null}
+
                       <button
                         onClick={logout}
                         type="submit"
@@ -138,13 +173,10 @@ const handlemycart = ()=>{
                 )}
               </div>
             </div>
-            {/* <form className="d-flex" role="search">
-        <input className="form-control me-2" type="search" placeholder="Search" aria-label="Search"/>
-        <button className="btn btn-primary" type="submit">Search</button>
-      </form> */}
           </div>
         </div>
-      </nav>
+</nav>
+    
     </>
   );
 }

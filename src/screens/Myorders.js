@@ -1,100 +1,104 @@
-import React, { useEffect, useState } from 'react'
-import Footer from '../components/Footer';
+
+import Footer from "../components/Footer";
+import React, { useEffect, useState } from 'react';
+import './Myorders.css'
 import Navbar from '../components/Navbar';
-
-export default function MyOrder() {
-
-    const [orderData, setorderData] = useState({})
-
-    const fetchMyOrder = async () => {
-        console.log(localStorage.getItem('userEmail'))
-        await fetch("http://localhost:5000/orders", {
-            // credentials: 'include',
-            // Origin:"http://localhost:3000/login",
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body:JSON.stringify({
-                userEmail:localStorage.getItem('userEmail')
-            })
-        }).then(async (res) => {
-            let response = await res.json()
-            await setorderData(response)
-        })
+import { Container, Row, Col, Alert } from "react-bootstrap";
 
 
+export default function MyOrders() {
+  const [items, setItems] = useState([]);
+  const userEmail = localStorage.getItem('userEmail');
 
-        // await res.map((data)=>{
-        //    console.log(data)
-        // })
-
-
+  // load data
+  const loadData = async () => {
+    try {
+      const response = await fetch('http://localhost:5000/orders', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ userEmail }),
+      });
+      const json = await response.json();
+      setItems(json);
+    } catch (error) {
+      console.log(error);
     }
+  };
 
-    useEffect(() => {
-        fetchMyOrder()
-    }, [])
+  useEffect(() => {
+    loadData();
+  }, []);
+  const [mode, setmode] = useState("light");
 
-    return (
-        <div>
-            <div>
-                <Navbar />
+  const togglemode = () => {
+    if (mode === "light") {
+      setmode("dark");
+      document.body.style.backgroundColor = "#042743";
+      document.title = "Online Food Ordering System - Dark Mode";
+    } else {
+      setmode("light");
+      document.body.style.backgroundColor = "white";
+      document.title = "Online Food Ordering System - Light Mode";
+    }
+  };
+
+
+  return (
+    <>  <Navbar
+    title="Online Food Ordering System"
+    mode={mode}
+    togglemode={togglemode}
+  />
+   
+    
+    
+    <div className='container'>
+    <h1 className="text-center my-5"><Alert variant="success">My Orders</Alert></h1> 
+      <div className='row'>
+        {items.map(({ userEmail, orderData, orderDate }) => {
+          const orderItems = JSON.parse(orderData);
+          let totalPrice = 0;
+          orderItems.forEach(({ price, quantity }) => {
+            totalPrice += price * quantity;
+          });
+          return (
+            <div className='col-md-6' key={orderDate}>
+              <div className='card' style={{ width: '22rem' }}>
+                <div className='card-header bg-primary text-white'>Order Date: {orderDate}</div>
+                <ul className='list-group list-group-flush'>
+                  {orderItems.map(({ name, price, qty }, index) => (
+                    <li className='list-group-item' key={index}>
+                      <div className='d-flex justify-content-between'>
+                        <div>{name}</div>
+                        <div>₹{price}/-</div>
+                      </div>
+                      <div className='d-flex justify-content-between'>
+                        
+                        
+                      </div>
+                    </li>
+                  ))}
+                  <li className='list-group-item'>
+                    <div className='d-flex justify-content-between'>
+                      <div>
+                        <b>Total: ₹{totalPrice}/-</b>
+                      </div>
+                    </div>
+                  </li>
+                </ul>
+              </div>
             </div>
-
-            <div className='container'>
-                <div className='row'>
-
-                    {orderData !== {} ? Array(orderData).map(data => {
-                        return (
-                            data.orderData ?
-                                data.orderData.order_data.slice(0).reverse().map((item) => {
-                                    return (
-                                        item.map((arrayData) => {
-                                            return (
-                                                <div  >
-                                                    {arrayData.Order_date ? <div className='m-auto mt-5'>
-
-                                                        {data = arrayData.Order_date}
-                                                        <hr />
-                                                    </div> :
-
-                                                        <div className='col-12 col-md-6 col-lg-3' >
-                                                            <div className="card mt-3" style={{ width: "16rem", maxHeight: "360px" }}>
-                                                                <img src={arrayData.img} className="card-img-top" alt="..." style={{ height: "120px", objectFit: "fill" }} />
-                                                                <div className="card-body">
-                                                                    <h5 className="card-title">{arrayData.name}</h5>
-                                                                    <div className='container w-100 p-0' style={{ height: "38px" }}>
-                                                                        <span className='m-1'>{arrayData.qty}</span>
-                                                                        <span className='m-1'>{arrayData.size}</span>
-                                                                        <span className='m-1'>{data}</span>
-                                                                        <div className=' d-inline ms-2 h-100 w-20 fs-5' >
-                                                                            ₹{arrayData.price}/-
-                                                                        </div>
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-
-                                                        </div>
-
-
-
-                                                    }
-
-                                                </div>
-                                            )
-                                        })
-
-                                    )
-                                }) : ""
-                        )
-                    }) : ""}
-                </div>
-
-
-            </div>
-
-            {/* <Footer /> */}
+          );
+        })}
+      </div>
+      <button className='btn btn-primary mt-3' >Send Email</button>
+    </div>
+    <div >
+          <Footer />
         </div>
-    )
-}
+    </>
+  );
+  
+    }

@@ -35,3 +35,33 @@ export  const withdrawMoney = (amount) => {
   export const clearCart = () => ({
     type: 'CLEAR_CART'
   });
+
+  export const ADDTOADMIN = (item) => {
+    return {
+      type: "ADD_TO_ADMIN",
+      payload: item
+    };
+  };
+
+  export const ADDTOFOOD = (item) => {
+    return {
+      type: "ADD_TO_FOOD",
+      payload: item
+    };
+  };
+
+  export const ADDTOD = (item) => {
+    return {
+      type: "ADD_TO_D",
+      payload: item
+    };
+  };
+
+
+
+export const updateOrderStatus = (status) => {
+  return {
+    type: "UPDATE_ORDER_STATUS",
+    payload: status,
+  };
+};

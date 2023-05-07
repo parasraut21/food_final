@@ -1,54 +1,47 @@
-// import React from 'react';
-// import { useSelector } from 'react-redux';
 
-// const Cart = () => {
-//   const cartItems = useSelector(state => state.cartItems);
-
-//   return (
-//     <div>
-//       <h2>Cart</h2>
-//       { cartItems.length !== 0 ?
-//       cartItems.map(item => (
-//         <div key={item.id}>
-//             <img src={item.img} alt={item.name} />
-//           <h3>{item.name}</h3>
-//           <p>Quantity: {item.qty}</p>
-//           <p>Size: {item.qtysize}</p>
-//           <p>Final Price: ₹{item.price}/-</p>
-//         </div>
-//       ))
-//        :  <p>Your cart is empty</p>
-//          }
-//     </div>
-//   );
-// };
-
-// export default Cart;
-
-import React from 'react';
+import React, { useState } from "react";
 import { actionCreator } from "../state/index";
 import { bindActionCreators } from "redux";
 import { useSelector, useDispatch } from 'react-redux';
 import { removeFromCart } from '../state/action_creater/action_creater';
+import { updateOrderStatus } from "../state/action_creater/action_creater"; 
+
+import Payment from '../components/Payment';
+import Modell from "./Modell";
+
 
 export default function Cart() {
+  const approvedArray = useSelector((state) => state.ADMIN);
+  const approved = approvedArray.length > 0 && approvedArray[0].approved;
+  console.log(approved)
+ 
+
+
   const cartItems = useSelector(state => state.cartItems);
   const userEmail = localStorage.getItem("userEmail");
   const dispatch = useDispatch();
   const actions = bindActionCreators(actionCreator, dispatch);
 
+  const amount = useSelector((state) => state.amount);
+
+  const [payview,setPayview] = useState(false);
+
+
   if (cartItems.length === 0) {
     return (
       <div>
-        <div className='m-5 w-100 text-center fs-3'>The Cart is Empty!</div>
+            <div className='m-5 w-100 text-center fs-3'>The Cart is Empty!</div>
       </div>
     )
   }
+ 
 
   const totalPrice = cartItems.reduce((acc, cur) => acc + cur.qty * cur.price, 0);
 
   const handleCheckout = async () => {
+  
     try {
+      
       const orderData = cartItems.map(({ id, name, price, qty, qtysize }) => ({
         foodItemId: id,
         name,
@@ -71,7 +64,10 @@ export default function Cart() {
         const { order } = await response.json();
         console.log("Order saved successfully!", order);
         // clear the cart and show a success message
-        actions.clearCart();
+      //  actions.clearCart();
+      dispatch(updateOrderStatus("approved"));
+      setPayview(true)
+   
       }
      
        
@@ -83,8 +79,8 @@ export default function Cart() {
       console.error("Error hai bhai",error);
     
     }
-   
   };
+  var q;
   return (
     <div>
       <div className='container m-auto mt-5 table-responsive table-responsive-sm table-responsive-md' style={{ "color": "white" }}>
@@ -101,6 +97,7 @@ export default function Cart() {
           </thead>
           <tbody className='text-light'>
             {cartItems.map((food, index) => (
+             
               <tr key={index}>
                 <th scope='row'>{index + 1}</th>
                 <td>{food.name}</td>
@@ -117,8 +114,16 @@ export default function Cart() {
         </table>
         <div><h1 className='fs-2'>Total Price: {totalPrice}/-</h1></div>
         <div>
-          <button className='btn bg-success mt-5 ' onClick={handleCheckout} > Check Out </button>
+          {/* <button className='btn bg-success mt-5 ' onClick={handleCheckout} > Check Out </button> */}
+         
+          <div>
+            <button className='btn bg-success mt-5' onClick={handleCheckout}>Check Out</button>
+          </div>
+     
+        {payview?<Modell onClose={()=>setPayview(false)}><Payment/></Modell>
+                      :null}
         </div>
+       
       </div>
     </div>
   )

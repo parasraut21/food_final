@@ -2,6 +2,7 @@ import React from 'react'
 
 import  {useState} from 'react'
 import {useNavigate} from 'react-router-dom';
+import Navbar from '../components/Navbar';
 export default function Reset() {
     const [credentials, setCredentials] = useState({email: "", cpassword: ""}) 
     const navigate = useNavigate();
@@ -30,13 +31,31 @@ export default function Reset() {
     const onChange = (e)=>{
         setCredentials({...credentials, [e.target.name]: e.target.value})
     }
+    const [mode, setmode] = useState("light");
 
+    const togglemode = () => {
+      if (mode === "light") {
+        setmode("dark");
+        document.body.style.backgroundColor = "#042743";
+        document.title = "Online Food Ordering System - Dark Mode";
+      } else {
+        setmode("light");
+        document.body.style.backgroundColor = "white";
+        document.title = "Online Food Ordering System - Light Mode";
+      }
+    };
  
   return (
     <>
+      <Navbar
+            title="Online Food Ordering System"
+            mode={mode}
+            togglemode={togglemode}
+          />
         <div className='container mt-3'>
-        <h2 >Log in</h2>
+        
     <form  onSubmit={handleSubmit} className="my-5">
+    <h2 >Reset Password</h2>
                 <div className="mb-3" >
                     <label htmlFor="email" className="form-label">Email address</label>
                     <input type="email" className="form-control" value={credentials.email} onChange={onChange} id="email" name="email" aria-describedby="emailHelp" />

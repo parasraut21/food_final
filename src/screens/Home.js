@@ -2,12 +2,11 @@ import Footer from "../components/Footer";
 import Navbar from "../components/Navbar";
 import React, { useState,useEffect } from "react";
 import Card from "../components/Card";
+// import './Home.css';
 import Carousal from "../components/Carousal";
 export default function Home() {
-  const [mode, setmode] = useState("light");
- 
   const [search,setSearch] = useState('');
-
+  const [mode, setmode] = useState("light");
 
   const togglemode = () => {
     if (mode === "light") {
@@ -112,9 +111,9 @@ useEffect(()=>{
           :""
          }
        </div>
-        {/* <div >
+        <div >
           <Footer />
-        </div> */}
+        </div>
       </div>
     </>
   );
