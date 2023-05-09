@@ -1,5 +1,5 @@
 
-import React, { useState } from "react";
+import React,{ useEffect, useState } from 'react';
 import { actionCreator } from "../state/index";
 import { bindActionCreators } from "redux";
 import { useSelector, useDispatch } from 'react-redux';
@@ -13,8 +13,34 @@ import Modell from "./Modell";
 export default function Cart() {
   const approvedArray = useSelector((state) => state.ADMIN);
   const approved = approvedArray.length > 0 && approvedArray[0].approved;
-  console.log(approved)
+  
  
+
+  const [id, setId] = useState(null);
+  //
+  useEffect(() => {
+    async function fetchData() {
+      try {
+     
+        const response = await fetch('http://localhost:5000/getcustomers', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({ email:userEmail}),
+        });
+        const data = await response.json();
+        setId(data[0].id);
+       
+      } catch (error) {
+        console.error(error);
+      }
+    }
+
+    fetchData();
+  }, []);
+ 
+
 
 
   const cartItems = useSelector(state => state.cartItems);
@@ -50,6 +76,7 @@ export default function Cart() {
         qtysize
       }));
       const orderDate = new Date();
+
        // replace with the actual user's email address
   
       const response = await fetch("http://localhost:5000/myorders", {
@@ -57,7 +84,7 @@ export default function Cart() {
         headers: {
           "Content-Type": "application/json"
         },
-        body: JSON.stringify({ userEmail, orderData, orderDate })
+        body: JSON.stringify({ userEmail, orderData, orderDate ,customerId:id})
       });
   
       if (response.ok) {
@@ -66,12 +93,8 @@ export default function Cart() {
         // clear the cart and show a success message
       //  actions.clearCart();
       dispatch(updateOrderStatus("approved"));
-      setPayview(true)
-   
+      setPayview(true);
       }
-     
-       
-    
       else {
         throw new Error("Error saving order details!");
       }
@@ -81,6 +104,9 @@ export default function Cart() {
     }
   };
   var q;
+
+  //
+
   return (
     <div>
       <div className='container m-auto mt-5 table-responsive table-responsive-sm table-responsive-md' style={{ "color": "white" }}>
